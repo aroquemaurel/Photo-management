@@ -9,24 +9,26 @@ TAGDATETIME="Exif.Photo.DateTimeOriginal"
 chronologiqueView=1
 listArguments="$*"
 display=""
-
+dateTime=""
 # Si on a mis un -o en début ou fin des arguments
 if `$UTIL/./haveArgument.sh -o $*`
 then
 	chronologiqueView=0 
 fi
-if [ $# -eq 0 -o $# -eq 1 -a $1 = "-o" ]
+
+if [ $# -eq 0 -o $# -eq 1 -a "$1" = "-o" ]
 then
-	exit 1	
+	exit 1
 fi
+
 for arguments
 do
 	if [ "$arguments" != "-o" ]
 	then
 		if `$UTIL/./isAccessibleFile.sh $arguments`
 		then
-			display="$display \n$arguments : `exiv2 $arguments -g $TAGDATETIME|tr -s ' ' ' ' |
-			cut -d ' ' -f 4-5`"
+			dateTime=`exiv2 "$arguments" -g $TAGDATETIME|tr -s ' ' ' ' | cut -d ' ' -f 4-5`
+			display="$display $arguments : $dateTime\n" 
 		else
 			exit 3
 		fi 
