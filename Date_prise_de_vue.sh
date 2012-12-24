@@ -5,18 +5,28 @@
 # Constantes
 UTIL="util"
 TAGDATETIME="Exif.Photo.DateTimeOriginal"
+
+haveGoogNbArguments() {
+	if [ $# -eq 0 -o $# -eq 1 -a "$1" = "-o" ]
+	then
+		return 1
+	else
+		return 0
+	fi
+}
 # Initialisation de toutes les variables
 chronologiqueView=1
 listArguments="$*"
 display=""
 dateTime=""
+
 # Si on a mis un -o en début ou fin des arguments
 if `$UTIL/./haveArgument.sh -o $*`
 then
 	chronologiqueView=0 
 fi
 
-if [ $# -eq 0 -o $# -eq 1 -a "$1" = "-o" ]
+if ! haveGoogNbArguments $*
 then
 	exit 1
 fi
