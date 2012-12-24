@@ -29,7 +29,7 @@ formatDateTime() {
 }
 
 renameFileWithDate() {
-	cp $1$3 "$1.$2$3"
+	mv $1$3 "$1.$2$3"
 }
 displayFileWithDate() {
 	echo "$1$3 -> $1.$2$3"
@@ -44,27 +44,36 @@ if ! haveGoogNbArguments $*
 then
 	exit 1
 fi
-
 for arguments
 do
 	if [ "$arguments" != "-a" ]
 	then
+		#Accessibilité lecture
 		if ! `$UTIL/./isAccessibleFile.sh "$arguments"`
 		then
 			exit 2
 		fi
 
+		#Accesibilité ecriture répertoire parent
+		if [ ! -w `dirname $arguments` ]
+		then
+			echo "Le repertoire n'est pas accesible en écriture" >&2
+			exit 3
+		fi
+
+		
 		if [ ! -w "$arguments" ]
 		then
 			echo "Vous n'avez pas les droits d'écriture sur le fichier" >&2
 			continue
 		fi
-
 		getDateTime	"$arguments"
 		formatDateTime "$dateTime"
 		getFileNameAndExt "$arguments"
+
 		if echo "$arguments"| grep '\.[0-9]*-[0-9]*-[0-9]*_[0-9]*\.[0-9]*\.[0-9]*\.'> /dev/null
 		then
+			echo "Le fichier $argument est déjà correctement nommé" >&2
 			exit 3
 		else
 			if [ $noModify ]
@@ -78,3 +87,4 @@ do
 done
 
 exit 0
+

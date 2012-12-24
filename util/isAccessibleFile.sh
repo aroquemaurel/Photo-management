@@ -13,11 +13,5 @@ then
 	exit 2
 fi
 
-#if [ ! -x $1 ]
-#then
-#	echo Vous n avez pas les droits d\'execution sur $1 >&2
-#	exit 3
-#fi
-
 exit 0
 
