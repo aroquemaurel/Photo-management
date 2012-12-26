@@ -13,9 +13,9 @@ haveGoogNbArguments() {
 	fi
 }
 
-		
-if ! haveGoogNbArguments $*
+if ! haveGoogNbArguments "$@"
 then
+	echo "Le nombre d'arguments est incorrect" >&2
 	exit 1
 fi
 
@@ -30,7 +30,12 @@ then
 	exit 2
 fi
 
-exiv2 -M"set Exif.Image.ImageDescription charset=Ascii $2" $1 
+if [ "$2" ]
+then
+	exiv2 -M"set Exif.Image.ImageDescription $2" "$1" 
+else
+	exiv2 -M"del Exif.Image.ImageDescription" "$1" 
+fi
 
 exit 0
 

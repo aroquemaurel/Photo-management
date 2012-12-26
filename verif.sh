@@ -1,4 +1,3 @@
-
 #! /bin/sh
 
 verif()
@@ -223,7 +222,7 @@ then
     $script "_$nom1"
     date1=`ls -l "_$nom1"| tr -s ' '| cut -f6-8 -d' '`
     date2=`$rep/Date_prise_de_vue.sh "$fichier"| tr -s ' '| cut -f2-3 -d' '`
-#BACK    cmd="echo $date2| grep \" `echo $date1|cut -f3 -d' '`\" && echo $date2| grep \"`echo $date1|cut -f2 -d' '` \""
+#    cmd="echo $date2| grep \" `echo $date1|cut -f3 -d' '`\" && echo $date2| grep \"`echo $date1|cut -f2 -d' '` \""
 	cmd="echo $date2| grep \" `echo $date1|cut -f3 -d' '`\" && echo $date2| grep \"`echo $date1|cut -f1 -d' '` \""
     text="cp \"$fichier\" \"_$nom1\";$script \"_$nom1\";"
     verif "" eval "$cmd"
