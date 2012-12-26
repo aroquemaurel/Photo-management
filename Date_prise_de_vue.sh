@@ -37,8 +37,8 @@ do
 	then
 		if `$UTIL/./isAccessibleFile.sh $arguments`
 		then
-			dateTime=`exiv2 "$arguments" -g $TAGDATETIME|tr -s ' ' ' ' | cut -d ' ' -f 4-5`
-			display="$display $arguments : $dateTime\n" 
+			dateTime=`$UTIL/./getTaken.sh "$arguments"`
+			display="$display $arguments: $dateTime\n" 
 		else
 			exit 3
 		fi 
