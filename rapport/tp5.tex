@@ -1,0 +1,42 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage[top=1.7cm, bottom=1.7cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{verbatim}
+\usepackage{tikz} %Vectoriel
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{multido}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{float}
+
+\newcommand{\titre}{Gestion de photos à partir de tags}
+\newcommand{\numero}{}
+\newcommand{\typeDoc}{Projet}
+\newcommand{\module}{Système 1}
+\newcommand{\sigle}{systeme}
+\newcommand{\semestre}{3}
+
+\input{/home/satenske/cours/includesLaTeX/l2/tddm.tex}
+\input{/home/aroquemaurel/cours/includesLaTeX/listings.tex} %prise en charge du langage C 
+\input{/home/aroquemaurel/cours/includesLaTeX/remarquesExempleAttention.tex}
+\input{/home/aroquemaurel/cours/includesLaTeX/polices.tex}
+\input{/home/aroquemaurel/cours/includesLaTeX/affichageChapitre.tex}
+
+\makeatother
+\begin{document}
+	\maketitle
+	\section{Scripts Simples}
+	\subsection{\texttt{Date\_prise\_de\_vue.sh [-o] fichier\_photo [fichier\_photo \ldots]}}
+	\subsection{\texttt{Met\_date\_dans\_nom.sh [-a] fichier\_photo}}
+	\subsection{\texttt{Change\_description.sh fichier\_photo description}}
+	\subsection{\texttt{Change\_date\_modif.sh fichier\_photo}}
+	\section{Scripts complexes}
+	\subsection{\texttt{Range\_selon\_date\_et\_description.sh [-c | -a] fichier\_photo [répertoire]}}
+	\subsection{\texttt{Range\_Mes\_Photos.sh [-d répertoire] fichier\_photo [fichier\_photo \ldots]}}
+\end{document}
