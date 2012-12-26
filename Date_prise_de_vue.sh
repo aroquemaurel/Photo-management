@@ -1,7 +1,6 @@
 #!/bin/sh
 # -*- coding: UTF8 -*-
 
-#TODO supprimer les -o de la boucle
 # Constantes
 UTIL="util"
 TAGDATETIME="Exif.Photo.DateTimeOriginal"
@@ -37,7 +36,7 @@ do
 	then
 		if `$UTIL/./isAccessibleFile.sh $arguments`
 		then
-			dateTime=`$UTIL/./getTaken.sh "$arguments"`
+			dateTime=`exiv2 "$arguments" -g $TAGDATETIME|tr -s ' ' ' ' | cut -d ' ' -f 4-5`
 			display="$display $arguments: $dateTime\n" 
 		else
 			exit 3
