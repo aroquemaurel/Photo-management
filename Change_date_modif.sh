@@ -30,6 +30,11 @@ then
 	exit 2
 fi
 
+if ! `$UTIL/./isImage.sh "$1"`
+then
+	exit 3
+fi
+
 
 dateTime=`./Date_prise_de_vue.sh $1|tr -s ' ' |cut -f2-3 -d' '|sed "s/..$//"`
 dateTime=`echo $dateTime|sed -e "s/ //g"|sed -e "s/://g"`

@@ -53,12 +53,16 @@ do
 		then
 			exit 2
 		fi
+		if ! `$UTIL/./isImage.sh $arguments`
+		then
+			exit 3
+		fi
 
 		#Accesibilité ecriture répertoire parent
 		if [ ! -w `dirname $arguments` ]
 		then
 			echo "Le repertoire n'est pas accesible en écriture" >&2
-			exit 3
+			exit 4
 		fi
 
 		
@@ -74,7 +78,7 @@ do
 		if echo "$arguments"| grep '\.[0-9]*-[0-9]*-[0-9]*_[0-9]*\.[0-9]*\.[0-9]*\.'> /dev/null
 		then
 			echo "Le fichier $argument est déjà correctement nommé" >&2
-			exit 3
+			exit 5
 		else
 			if [ $noModify ]
 			then

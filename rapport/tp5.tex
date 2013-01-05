@@ -1,7 +1,8 @@
 \documentclass[a4paper, 11pt]{article}
 
-\usepackage{lmodern}
 \usepackage{xcolor}
+\input{/home/aroquemaurel/cours/includesLaTeX/couleurs.tex}
+\usepackage{lmodern}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
@@ -14,6 +15,7 @@
 \usepackage{amssymb}
 \usepackage{multicol}
 \usepackage{float}
+\usepackage[urlbordercolor={1 1 1}, linkbordercolor={1 1 1}, linkcolor=vert1, urlcolor=bleu, colorlinks=true]{hyperref}
 
 \newcommand{\titre}{Gestion de photos à partir de tags}
 \newcommand{\numero}{}
@@ -27,16 +29,95 @@
 \input{/home/aroquemaurel/cours/includesLaTeX/remarquesExempleAttention.tex}
 \input{/home/aroquemaurel/cours/includesLaTeX/polices.tex}
 \input{/home/aroquemaurel/cours/includesLaTeX/affichageChapitre.tex}
-
+\newcommand{\exiv}{\texttt{exiv2}}
 \makeatother
 \begin{document}
 	\maketitle
 	\section{Scripts Simples}
 	\subsection{\texttt{Date\_prise\_de\_vue.sh [-o] fichier\_photo [fichier\_photo \ldots]}}
+	Ce script assez simple à permis de prendre en main la coommande \texttt{exiv2}, c'est également avec ce script que des scripts utiles et simples ont été crées, 
+	ceux-ci sont utilisés dans plusieurs scripts du projet. Cf section \ref{scriptsUtils}.
+
+	Pour obtenir la date de prise de vue d'une photo, il faut utiliser le tag \texttt{Exif.Photo.DateTimeOriginal}, la commande \exiv{} possède un argument qui permet
+	d'afficher les informations concernant un tag, ainsi à l'aide de la commande \texttt{exiv2 photo -g Exif.Photo.DateTimeOriginal} nous possédons 
+	toutes les informations de prises de vue, ensuite à l'aide d'un cut nous pouvons en retirer les informations nécessaires.
+
+	Étant donné que nous pouvons choisir de donner plusieurs photos en paramètre, la commande ci-dessus est placé dans un \texttt{for}.
+	\lstinputlisting[numbers=none, language=sh, basicstyle=\scriptsize\ttfamily, mathescape=false,
+	caption=Exemple d'utilisation du script \texttt{Date\_prise\_de\_vue.sh}]{scripts/exemple1.sh}
+
 	\subsection{\texttt{Met\_date\_dans\_nom.sh [-a] fichier\_photo}}
+	Ce script nécessite le script précédent, en effet afin de mettre la date dans le nom, je récupère la date à l'aide de \texttt{Date\_prise\_de\_vue.sh}.
+
+	Ce script peut prendre en paramètre plusieurs photos bien que ça ne soit pas spécifié dans le synopsis par la présence de \ldots, en effet, il était très 
+	simple à mettre en oeuvre la présence de plusieurs paramètre (un simple \texttt{for}), et cela peut sembler très pratique.
+	\lstinputlisting[numbers=none, language=sh, basicstyle=\scriptsize\ttfamily, mathescape=false,
+	caption=Exemple d'utilisation du script \texttt{Met\_date\_dans\_nom.sh}]{scripts/exemple2.sh}
+
 	\subsection{\texttt{Change\_description.sh fichier\_photo description}}
+	Contrairement aux autres scripts, celui-ci ne prend qu'un seul paramètre : La description et la photo pour laquelle il faut changer la description.
+
+	Afin de pouvoir changer la description d'une image, j'ai recherché dans le man d'exiv2 et ai trouvé la commande suivante qui faisait ce dont j'avais besoin : 
+
+	\texttt{exiv2 -M''set Exif.Image.ImageDescription la nouvelle description'' image.jpg}
+	\lstinputlisting[numbers=none, language=sh, basicstyle=\scriptsize\ttfamily, mathescape=false,
+	caption=Exemple d'utilisation du script \texttt{Change\_description.sh}]{scripts/exemple3.sh}
 	\subsection{\texttt{Change\_date\_modif.sh fichier\_photo}}
+	Pour ce script, je me suis permis d'avoir la possibilité de passer en paramètre une liste de photos et non une unique photo, en effet, cela était très simple
+	à mettre en œuvre\footnote{un simple \texttt{for}} et cela peut être extrêmement pratique de faire passer \texttt{photo/*} par exemple.
+
+	Afin de modifier la date de modification d'un fichier, des recherches Google m'ont permis de découvrir que la commande \texttt{touch} possédait un argument
+	qui permettait de modifier celle-ci : \texttt{touch -t yyyyMMJJhhmm[.ss]} modifie la date de modification  au \texttt{jj/MM/yyyy} à \texttt{hh:mm:ss}
+
+	Ce script nécessite le script \texttt{Date\_prise\_de\_vue.sh}, en effet celui-ci est utilisé pour obtenir la date de prise de vue.
+
+	\section{Scripts utiles}\label{scriptsUtils}
+	Afin de limiter la redondance au maximum, j'ai créer trois scripts qui sont appelés dans chacun de scripts, ceux-ci sont des scripts de base de
+	vérifications.
+	\subsection{\texttt{haveArgument.sh}}
+	Ce script vérifie que le premier paramètre est présent dans la liste suivante de paramètre, ce script est utile afin de vérifier que les options sont
+	présentes, ou absente d'un appel de script.
+
+	Il est toujours utilisé de la façon suivante : 
+	\lstinputlisting[numbers=none, language=sh, basicstyle=\scriptsize\ttfamily, mathescape=false,
+	caption=Exemple d'utilisation du script \texttt{haveArgument.sh}]{scripts/exemple7.sh}
+	La variable \texttt{var} valant 0 si l'argument est présent et 1 sinon.
+	\subsection{\texttt{isAccessibleDirectory.sh}}
+	Ce script comme son nom l'indique sert à vérifier qu'un répertoire est accessible en lecture, dans le cas d'une accessibilité en écriture, je rajoute un
+	test manuellement.
+	\subsection{\texttt{isAccessibleFile.sh}}
+	Ce script comme son nom l'indique sert à vérifier qu'un fichier est accessible en lecture, dans le cas d'une accessibilité en écriture, je rajoute un
+	test manuellement.
 	\section{Scripts complexes}
 	\subsection{\texttt{Range\_selon\_date\_et\_description.sh [-c | -a] fichier\_photo [répertoire]}}
+	Cette fonction comporte un certain nombre de sous-programme afin de simplifier sa compréhension.
+	\subsubsection{\texttt{haveGoodNbArguments}}
+	Ce sous-programme sert simple à vérifier que le nombre d'argument du programme est correct, ceci à l'aide du script \texttt{util/haveArgument.sh}.
+	\subsubsection{\texttt{replaceAlphanumericByUnderscore}}
+	Cette fonction remplace les caractères alphanumériques par des underscore (\_) à l'aide du programme \texttt{sed}.
+	\subsubsection{\texttt{directoryArgumentExistAndIsWrittable}}
+	Ce sous-programme vérifie que le répertoire passé en argument existe et est accessible en écriture.
+	\subsubsection{\texttt{getFileAndDirectory}}
+	Ce script permet d'obtenir le répertoire de départ et le nom de la photo à déplacer, ceci en fonction des options présentes ou non, en effet, en fonction de
+	ces options, les numéros d'arguments peuvent changer.
+	
+	Si le répertoire n'est pas spécifié dans les arguments, celui-ci est \texttt{./}.
+	\subsubsection{\texttt{getGoodPartOfDate}}
+	Avec \texttt{getGoodPartOfDate} nous pouvons obtenir la partie de la date de prise de vue de la variable \texttt{file}\footnote{Celle-ci est obtenur après le
+	lancement du script \texttt{getFileAndDirectory}} que nous voulons en fonction de l'argument : 1 nous retourne l'année, 2 nous
+	retourne le mois et 3 nous retourne le jour.
+	\subsubsection{\texttt{getDescription}}
+	Cette fonction nous permet d'obtenir la description de \texttt{file}, la description ayant ses caractères alphanumériques remplacés par des underscore à
+	l'aide du script \texttt{replaceAlphanumericByUnderscore}.
+	\subsubsection{\texttt{getDirectoriesPath}}
+	Cette fonction nous retourne le chemin des répertoires à créer, ainsi celui-ci sera affiché si l'option \texttt{-a} est spécifié, et sera utilisé avec un
+	\texttt{mkdir -p} dans les autres cas.
+	
+
+	\lstinputlisting[numbers=none, language=sh, basicstyle=\scriptsize\ttfamily, mathescape=false,
+	caption=Exemple d'utilisation du script \texttt{Date\_prise\_de\_vue.sh}]{scripts/exemple5.sh}
 	\subsection{\texttt{Range\_Mes\_Photos.sh [-d répertoire] fichier\_photo [fichier\_photo \ldots]}}
+	Ce script utilise simplement le script précédent \texttt{Range\_selond\_date\_et\_description.sh} dans un \texttt{for} qui parcours la liste des arguments.
+	\lstinputlisting[numbers=none, language=sh, basicstyle=\scriptsize\ttfamily, mathescape=false,
+	caption=Exemple d'utilisation du script \texttt{Date\_prise\_de\_vue.sh}]{scripts/exemple6.sh}
 \end{document}

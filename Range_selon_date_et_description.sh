@@ -44,9 +44,9 @@ replaceAlphanumericByUnderscore() {
 
 # Quitte le programme avec le code de retour 2 si le répertoire n'est pas accesible.
 directoryArgumentExistAndIsWrittable() {
-	if [ $directory ] 
+	if [ "$1" ] 
 	then
-		if ! `$UTIL/./isAccessibleDirectory.sh "$directory"`
+		if ! `$UTIL/./isAccessibleDirectory.sh "$1"`
 		then
 			exit 2 
 		fi
@@ -56,15 +56,15 @@ directoryArgumentExistAndIsWrittable() {
 }
 
 getFileAndDirectory() {
-	if [ $1 = '-c' -o $1 = '-a' ]
+	if [ "$1" = '-c' -o "$1" = '-a' ]
 	then
-		file=$2
+		file="$2"
 		if [ "$2" != "-c" -o "$2" != "-a" -o "$2" ]
 		then
 			directory="$3"
 		fi
 	else
-		file=$1
+		file="$1"
 		if [ "$2" ]
 		then
 			directory="$2"
@@ -76,17 +76,18 @@ getFileAndDirectory() {
 		directory="."
 	fi
 }
+
 # Retourne la partie de la date correspondante à file suivant le premier argument
 # 1 année
 # 2 Mois
 # 3 Jours
 getGoodPartOfDate() {
 	part=`expr $1 + 1`
-	return=`./Date_prise_de_vue.sh $file|tr -s ' ' ':'|cut -f$part -d':'|sed "s/\([ ]\)//g"`
-	return=`echo $return|sed "s/\([ ]\)//g"`
+	return=`./Date_prise_de_vue.sh "$file"|tr -s ' ' ':'|cut -f$part -d':'|sed "s/\([ ]\)//g"`
+	return=`echo "$return"|sed "s/\([ ]\)//g"`
 }
 getDescription() {
-	return=`exiv2 -g Exif.Image.ImageDescription $file|tr -s ' '|cut -f4- -d' '`
+	return=`exiv2 -g Exif.Image.ImageDescription "$file"|tr -s ' '|cut -f4- -d' '`
 	replaceAlphanumericByUnderscore "$return"
 	return=`echo $return|sed "s/\([ ]\)//g"`
 }
@@ -96,8 +97,8 @@ getDirectoriesPath() {
 	getGoodPartOfDate 2
 	month=$return
 	getDescription 
-	description=$return
-	directoriesPath=$directory/$year/$month/$description
+	description="$return"
+	directoriesPath=`echo $directory/$year/$month/$description|sed "s/\([ ]\)//g"`
 }
 
 if ! haveGoogNbArguments $*
@@ -114,7 +115,7 @@ then
 	optionTiretA=0
 fi
 
-getFileAndDirectory $*
+getFileAndDirectory "$@"
 replaceAlphanumericByUnderscore "$directory"
 directory=$return
 
@@ -122,7 +123,12 @@ if ! `$UTIL/./isAccessibleFile.sh "$file"`
 then
 	exit 2
 fi
-directoryArgumentExistAndIsWrittable $directory
+
+if ! `$UTIL/./isImage.sh $file`
+then
+	exit 3
+fi
+directoryArgumentExistAndIsWrittable "$directory"
 
 getDirectoriesPath
 if [ $optionTiretA -eq 0 ]
@@ -132,7 +138,7 @@ else
 	mkdir -p $directoriesPath
 	if [ ! $optionTiretC -eq 0 ]
 	then
-		mv $file $directoriesPath
+		mv "$file" $directoriesPath
 	fi
 fi
 

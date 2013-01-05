@@ -30,6 +30,11 @@ then
 	exit 2
 fi
 
+if ! `$UTIL/./isImage.sh $1`
+then
+	exit 3
+fi
+
 if [ "$2" ]
 then
 	exiv2 -M"set Exif.Image.ImageDescription $2" "$1" 

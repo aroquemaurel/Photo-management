@@ -34,13 +34,18 @@ for arguments
 do
 	if [ "$arguments" != "-o" ]
 	then
-		if `$UTIL/./isAccessibleFile.sh $arguments`
+		if ! $UTIL/./isAccessibleFile.sh $arguments
 		then
-			dateTime=`exiv2 "$arguments" -g $TAGDATETIME|tr -s ' ' ' ' | cut -d ' ' -f 4-5`
-			display="$display $arguments: $dateTime\n" 
-		else
 			exit 3
-		fi 
+		fi
+
+		if ! $UTIL/./isImage.sh $arguments
+		then
+			exit 4
+		fi
+
+		dateTime=`exiv2 "$arguments" -g $TAGDATETIME|tr -s ' ' ' ' | cut -d ' ' -f 4-5`
+		display="$display $arguments: $dateTime\n" 
 	fi
 done
 

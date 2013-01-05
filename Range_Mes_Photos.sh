@@ -62,8 +62,14 @@ do
 	then
 		continue
 	fi
+	
+	if ! `$UTIL/./isImage.sh $file`
+	then
+		continue
+	fi
+
 	returnCode=0
-	./Range_selon_date_et_description.sh $file $directory
+	./Range_selon_date_et_description.sh "$file" "$directory"
 done
 
 exit $returnCode
