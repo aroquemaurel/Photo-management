@@ -6,8 +6,8 @@ UTIL="util"
 TAGDATETIME="Exif.Photo.DateTimeOriginal"
 
 # Déclaration variables
-optionTiretC=1
-optionTiretA=1
+optionTiretC="1"
+optionTiretA="1"
 file=1
 directoriesPath=1
 
@@ -109,10 +109,10 @@ fi
 # Si on a mis un -c ou -a en début ou fin des arguments
 if `$UTIL/./haveArgument.sh -c $*`
 then
-	optionTiretC=0 
+	optionTiretC="0" 
 elif `$UTIL/./haveArgument.sh -a $*`
 then
-	optionTiretA=0
+	optionTiretA="0"
 fi
 
 getFileAndDirectory "$@"
@@ -131,12 +131,13 @@ fi
 directoryArgumentExistAndIsWrittable "$directory"
 
 getDirectoriesPath
-if [ $optionTiretA -eq 0 ]
+if [ $optionTiretA = '0' ]
 then
 	echo $directoriesPath
 else
 	mkdir -p $directoriesPath
-	if [ ! $optionTiretC -eq 0 ]
+
+	if [ $optionTiretC = '1' ]
 	then
 		mv "$file" $directoriesPath
 	fi

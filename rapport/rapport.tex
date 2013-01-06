@@ -88,6 +88,11 @@
 	\subsection{\texttt{isAccessibleFile.sh}}
 	Ce script comme son nom l'indique sert à vérifier qu'un fichier est accessible en lecture, dans le cas d'une accessibilité en écriture, je rajoute un
 	test manuellement.
+	\subsection{\texttt{isImage.sh}}
+	Ce script sert à tester si un fichier est bien une image, pour cela j'utilise la commande \texttt{file}, si le fichier est une image un \texttt{grep
+	''image''} devrait retourner 0.
+
+	Il est ainsi appelé dans tous les scripts afin d'éviter des erreurs de la part d'exiv2.
 	\section{Scripts complexes}
 	\subsection{\texttt{Range\_selon\_date\_et\_description.sh [-c | -a] fichier\_photo [répertoire]}}
 	Cette fonction comporte un certain nombre de sous-programme afin de simplifier sa compréhension.
