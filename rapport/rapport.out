@@ -1,0 +1,20 @@
+\BOOKMARK [1][-]{section.1}{Scripts Simples}{}
+\BOOKMARK [2][-]{subsection.1.1}{Date\137prise\137de\137vue.sh [-o] fichier\137photo [fichier\137photo \203]}{section.1}
+\BOOKMARK [2][-]{subsection.1.2}{Met\137date\137dans\137nom.sh [-a] fichier\137photo}{section.1}
+\BOOKMARK [2][-]{subsection.1.3}{Change\137description.sh fichier\137photo description}{section.1}
+\BOOKMARK [2][-]{subsection.1.4}{Change\137date\137modif.sh fichier\137photo}{section.1}
+\BOOKMARK [1][-]{section.2}{Scripts utiles}{}
+\BOOKMARK [2][-]{subsection.2.1}{haveArgument.sh}{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{isAccessibleDirectory.sh}{section.2}
+\BOOKMARK [2][-]{subsection.2.3}{isAccessibleFile.sh}{section.2}
+\BOOKMARK [2][-]{subsection.2.4}{isImage.sh}{section.2}
+\BOOKMARK [1][-]{section.3}{Scripts complexes}{}
+\BOOKMARK [2][-]{subsection.3.1}{Range\137selon\137date\137et\137description.sh [-c | -a] fichier\137photo [r\351pertoire]}{section.3}
+\BOOKMARK [3][-]{subsubsection.3.1.1}{haveGoodNbArguments}{subsection.3.1}
+\BOOKMARK [3][-]{subsubsection.3.1.2}{replaceAlphanumericByUnderscore}{subsection.3.1}
+\BOOKMARK [3][-]{subsubsection.3.1.3}{directoryArgumentExistAndIsWrittable}{subsection.3.1}
+\BOOKMARK [3][-]{subsubsection.3.1.4}{getFileAndDirectory}{subsection.3.1}
+\BOOKMARK [3][-]{subsubsection.3.1.5}{getGoodPartOfDate}{subsection.3.1}
+\BOOKMARK [3][-]{subsubsection.3.1.6}{getDescription}{subsection.3.1}
+\BOOKMARK [3][-]{subsubsection.3.1.7}{getDirectoriesPath}{subsection.3.1}
+\BOOKMARK [2][-]{subsection.3.2}{Range\137Mes\137Photos.sh [-d r\351pertoire] fichier\137photo [fichier\137photo \203]}{section.3}
